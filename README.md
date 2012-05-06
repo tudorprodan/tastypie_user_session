@@ -1,4 +1,4 @@
-This packages provides:
+## This packages provides:
 
 ```python
 # yourapp/api.py
@@ -9,7 +9,7 @@ v1_api = Api(api_name="v1")
 v1_api.register(FacebookAuthUserSessionResource())
 ```
 
-You can now:
+## You can:
 
 ```
 - GET /api/v1/user_session/
@@ -23,3 +23,21 @@ You can now:
 - DELETE /api/v1/user_session/<session_key>/
   - delete the session (logout)
 ```
+
+
+## Also included:
+
+### DjangoAuthUserSessionResource
+
+Allows users to authenticate with any backend by POSTing credentials.  
+User creation is not supported, because I have not implemented it, but could be added.
+
+### UserSessionResource
+
+This is the base class, which is meant to be extended by _you_ to achieve the behavior you want.
+
+Both `FacebookAuthUserSessionResource` and `DjangoAuthUserSessionResource` override a single method from this class:  
+`def find_or_create_user_for_new_session(self, bundle, request, **kwargs):`
+
+
+
