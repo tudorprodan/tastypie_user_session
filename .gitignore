@@ -1,0 +1,4 @@
+.venv
+*.pyc
+build
+src
