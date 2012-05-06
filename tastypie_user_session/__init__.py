@@ -1,4 +1,4 @@
-__version__ = (0, 0, 1)
+__version__ = "0.1"
 
 from user_session import UserSession
 from user_session_resource import UserSessionResource
