@@ -17,7 +17,7 @@ You can now:
   - refresh your session
 - `POST /api/v1/user_session/`
   - create a new session (login) with a new or existing user for the app
-    - via the Facebook JS SDK cookie
-    - via your own facebook auth code
+    - via the Facebook JS SDK cookie (empty request body)
+    - via your own facebook auth code (`{"facebook_code": "<your_users_facebook_code>"}`)
 - `DELETE /api/v1/user_session/<session_key>/`
   - delete the session (logout)
