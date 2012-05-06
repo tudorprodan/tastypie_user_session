@@ -37,7 +37,10 @@ User creation is not supported, because I have not implemented it, but could be 
 This is the base class, which is meant to be extended by _you_ to achieve the behavior you want.
 
 Both `FacebookAuthUserSessionResource` and `DjangoAuthUserSessionResource` override a single method from this class:  
-`def find_or_create_user_for_new_session(self, bundle, request, **kwargs):`
+```python
+def find_or_create_user_for_new_session(self, bundle, request, **kwargs)
+```
+
 
 
 
