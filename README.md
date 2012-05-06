@@ -42,5 +42,15 @@ def find_or_create_user_for_new_session(self, bundle, request, **kwargs)
 ```
 
 
+### Warning
+
+This is work in progress.
+
+`UserSessionResource` is written to be extended by others.
+
+`FacebookAuthUserSessionResource` is written to suit my specific needs, but I hope it either works for yours as well, or inspires you on how to customize the base class.
+
+
+
 
 
