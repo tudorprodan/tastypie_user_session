@@ -24,6 +24,8 @@ v1_api.register(FacebookAuthUserSessionResource())
   - delete the session (logout)
 ```
 
+As long as the client keeps using the same cookiejar (the way browsers do), he is now authenticated by `django.contrib.auth`'s middleware automatically.
+
 
 ## Also included:
 
