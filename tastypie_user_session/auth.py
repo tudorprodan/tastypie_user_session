@@ -18,7 +18,7 @@ def wrap_graph_api_errors(fn):
 class FacebookAuthBackend(ModelBackend):
 
     @wrap_graph_api_errors
-    def authenticate(self, fb_use_cookie=None, fb_code=None, fb_token=None, request=None):
+    def authenticate(self, fb_use_cookie=None, fb_code=None, fb_token=None, request=None, register_new_users=False):
         access_token = None
 
         if fb_use_cookie:
@@ -38,7 +38,7 @@ class FacebookAuthBackend(ModelBackend):
 
         user = self._get_user_for_facebook_graph(me)
 
-        if not user:
+        if not user and register_new_users:
             user = self._create_user_for_facebook_graph(me, graph)
 
         return user

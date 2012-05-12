@@ -7,10 +7,15 @@ class FacebookAuthUserSessionResource(UserSessionResource):
         """
             This class will authenticate against
             tastypie_user_session.FacebookAuthBackend.
+
+            You must make sure you have the auth backend enabled.
+
+            This resource will automatically register new users.
         """
         return authenticate(
             fb_use_cookie=bool(bundle.data.get("facebook_use_cookie", False)),
             fb_code=bundle.data.get("facebook_code", None),
             fb_token=bundle.data.get("facebook_token", None),
-            request=request
+            request=request,
+            register_new_users=True
         )
