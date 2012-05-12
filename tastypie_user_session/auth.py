@@ -89,7 +89,18 @@ class FacebookAuthBackend(ModelBackend):
 
         return user
 
-    # def _create_user_for_facebook_graph(self, me):
+    def _should_use_profile_for_facebook_id(self):
+        """
+            This method decides if lookup and storage of
+            the user's facebook_id should be done on
+            our own UserFacebookAccount model or on an
+            existing field, created by the user, on UserProfile.
+        """
+        if "user_profile_facebook_id_field" in tur_settings:
+            return True
+        else:
+            return False
+
     def _create_user_for_facebook_graph(self, me, graph):
         user = User()
 
@@ -128,17 +139,4 @@ class FacebookAuthBackend(ModelBackend):
         """
         app_label, model_name = settings.AUTH_PROFILE_MODULE.split(".")
         return models.get_model(app_label, model_name)
-
-    def _should_use_profile_for_facebook_id(self):
-        """
-            This method decides if lookup and storage of
-            the user's facebook_id should be done on
-            our own UserFacebookAccount model or on an
-            existing field, created by the user, on UserProfile.
-        """
-        if "user_profile_facebook_id_field" in tur_settings:
-            return True
-        else:
-            return False
-
 
