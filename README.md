@@ -6,14 +6,23 @@ This is the ideal way to authenticate for example in a `Backbone.js` client appl
 
 ## Installation
 
+```bash
+# grab the code from github
+pip install -e git://github.com/tudorprodan/tastypie_user_session.git#egg=tastypie-user-session
+# or PyPI
+pip install tastypie-user-session
+```
+
+`yourapp/api.py` :
 ```python
-# yourapp/api.py
 from tastypie_user_session import FacebookAuthUserSessionResource
 
 v1_api = Api(api_name="v1")
 v1_api.register(FacebookAuthUserSessionResource())
+```
 
-# settings.py
+`settings.py` :
+```python
 INSTALLED_APPS += ("tastypie_user_session", )
 
 TASTYPIE_USER_RESOURCE_SETTINGS = {
