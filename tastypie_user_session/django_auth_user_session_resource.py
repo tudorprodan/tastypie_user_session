@@ -11,4 +11,7 @@ class DjangoAuthUserSessionResource(UserSessionResource):
             existing users.
         """
 
-        return authenticate(**bundle.data)
+        return authenticate(
+            username=bundle.data["username"],
+            password=bundle.data["password"]
+        )
