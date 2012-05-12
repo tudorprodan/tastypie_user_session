@@ -1,6 +1,7 @@
 from django.core.urlresolvers import reverse
 from django.contrib.auth import login
 from django.contrib.auth import logout
+from django.contrib.auth import authenticate
 from tastypie import fields
 from tastypie.exceptions import NotFound
 from tastypie.exceptions import BadRequest
@@ -8,7 +9,28 @@ from tastypie.resources import Resource
 from tastypie.bundle import Bundle
 from tastypie.authorization import Authorization
 from tw.resources.user import UserResource
-from user_session import UserSession
+
+
+class UserSession(object):
+
+    @classmethod
+    def session_get_key(cls, request, create_if_needed=True):
+        if not request.session.session_key and create_if_needed:
+            request.session.create()
+        return request.session.session_key
+
+    @classmethod
+    def object_for_request(cls, request):
+        s = cls()
+        s.id = cls.session_get_key(request)
+        s.expire_date = request.session.get_expiry_date()
+        s.user = None
+
+        if request.user.is_authenticated():
+            s.user = request.user
+
+        return s
+
 
 class UserSessionResource(Resource):
     id = fields.CharField(attribute="id", readonly=True)
@@ -112,3 +134,39 @@ class UserSessionResource(Resource):
             raise NotFound("That's not your session.")
 
         return self._build_session_object(request)
+
+
+
+class FacebookAuthUserSessionResource(UserSessionResource):
+    """
+        This class will authenticate against
+        tastypie_user_session.FacebookAuthBackend.
+
+        You must make sure you have the auth backend enabled.
+
+        This resource will automatically register new users.
+    """
+
+    def find_or_create_user_for_new_session(self, bundle, request, **kwargs):
+        return authenticate(
+            fb_use_cookie=bool(bundle.data.get("facebook_use_cookie", False)),
+            fb_code=bundle.data.get("facebook_code", None),
+            fb_token=bundle.data.get("facebook_token", None),
+            request=request,
+            register_new_users=True
+        )
+
+
+
+class DjangoAuthUserSessionResource(UserSessionResource):
+    """
+        This class doesn't provide registering via this
+        API endpoint, it just logs in existing users.
+    """
+
+    def find_or_create_user_for_new_session(self, bundle, request, **kwargs):
+
+        return authenticate(
+            username=bundle.data["username"],
+            password=bundle.data["password"]
+        )
