@@ -11,7 +11,7 @@ tur_settings = settings.TASTYPIE_USER_RESOURCE_SETTINGS
 def wrap_graph_api_errors(fn):
     def wrapped(*args, **kwargs):
         try:
-            fn(*args, **kwargs)
+            return fn(*args, **kwargs)
         except facebook.GraphAPIError, e:
             raise BadRequest("GraphAPIError: %s" % e.message)
     return wrapped
