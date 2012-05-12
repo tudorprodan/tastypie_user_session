@@ -4,6 +4,7 @@ from django.contrib.auth.backends import ModelBackend
 from django.db import models
 from django.conf import settings
 from tastypie.exceptions import BadRequest
+from models import UserFacebookAccount
 
 tur_settings = settings.TASTYPIE_USER_RESOURCE_SETTINGS
 
@@ -67,17 +68,24 @@ class FacebookAuthBackend(ModelBackend):
         )
 
     def _get_user_for_facebook_graph(self, me):
-        k = "%s__exact" % tur_settings["user_profile_facebook_id_field"]
-        profile_class = self._get_user_profile_class()
         user = None
+        fb_id = me["id"]
 
-        try:
-            profile = profile_class._default_manager.get(**{
-                k: me["id"]
-            })
-            user = profile.user
-        except profile_class.DoesNotExist:
-            pass
+        if self._should_use_profile_for_facebook_id():
+            profile_class = self._get_user_profile_class()
+            k = "%s__exact" % tur_settings["user_profile_facebook_id_field"]
+            try:
+                profile = profile_class._default_manager.get(**{
+                    k: fb_id
+                })
+                user = profile.user
+            except profile_class.DoesNotExist:
+                pass
+        else:
+            try:
+                user = UserFacebookAccount.objects.get(facebook_id=fb_id).user
+            except UserFacebookAccount.DoesNotExist:
+                pass
 
         return user
 
@@ -96,13 +104,21 @@ class FacebookAuthBackend(ModelBackend):
         user.set_unusable_password()
         user.save()
 
-        """
-            Profile should be created by a post-save
-            signal on User. Hopefully..
-        """
-        profile = user.get_profile()
-        setattr(profile, tur_settings["user_profile_facebook_id_field"], me["id"])
-        profile.save()
+        if self._should_use_profile_for_facebook_id():
+            """
+                Profile should be created by a post-save
+                signal on User. Hopefully..
+            """
+            profile = user.get_profile()
+            setattr(profile, tur_settings["user_profile_facebook_id_field"], me["id"])
+            profile.save()
+        else:
+            ufa = UserFacebookAccount()
+            ufa.facebook_id = me["id"]
+            ufa.user = user
+            ufa.save()
+
+        return user
 
     def _get_user_profile_class(self):
         """
@@ -112,5 +128,17 @@ class FacebookAuthBackend(ModelBackend):
         """
         app_label, model_name = settings.AUTH_PROFILE_MODULE.split(".")
         return models.get_model(app_label, model_name)
+
+    def _should_use_profile_for_facebook_id(self):
+        """
+            This method decides if lookup and storage of
+            the user's facebook_id should be done on
+            our own UserFacebookAccount model or on an
+            existing field, created by the user, on UserProfile.
+        """
+        if "user_profile_facebook_id_field" in tur_settings:
+            return True
+        else:
+            return False
 
 
