@@ -11,8 +11,12 @@ setup(
     license="MIT",
     keywords="tastypie session authentication facebook",
     url="https://github.com/tudorprodan/tastypie_user_session/",
-    requires=(
-        "django-tastypie",
+    install_requires=(
+        "django_tastypie",
         "django"
-    )
+    ),
+    requires=(
+        "django_tastypie",
+        "django"
+    ),
 )
