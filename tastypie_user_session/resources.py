@@ -166,7 +166,4 @@ class DjangoAuthUserSessionResource(UserSessionResource):
 
     def find_or_create_user_for_new_session(self, bundle, request, **kwargs):
 
-        return authenticate(
-            username=bundle.data["username"],
-            password=bundle.data["password"]
-        )
+        return authenticate(**bundle.data)
