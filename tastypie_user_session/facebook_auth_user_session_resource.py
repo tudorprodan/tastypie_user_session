@@ -26,7 +26,7 @@ class FacebookAuthUserSessionResource(UserSessionResource):
             user = self._get_user_for_facebook_graph(me)
 
             if not user:
-                user = self._create_user_for_facebook_graph(me)
+                user = self._create_user_for_facebook_graph(me, graph)
 
             """
                 We shamelessly LIE about who authenticated the user.
@@ -54,12 +54,17 @@ class FacebookAuthUserSessionResource(UserSessionResource):
 
         return user
 
-    def _create_user_for_facebook_graph(self, me):
+    def _create_user_for_facebook_graph(self, me, graph):
         user = User()
-        user.first_name = me["first_name"]
-        user.last_name = me["last_name"]
-        user.email = me["email"]
-        user.username = "facebook_user_%s" % me["id"]
+
+        try:
+            user.first_name = me["first_name"]
+            user.last_name = me["last_name"]
+            user.email = me["email"]
+            user.username = "facebook_user_%s" % me["id"]
+        except KeyError, e:
+            raise BadRequest("Your facebook profile is lacking fields. Maybe you didn't ask for the proper permissions. Error was: %s", e.message)
+
         user.set_unusable_password()
         user.save()
 
