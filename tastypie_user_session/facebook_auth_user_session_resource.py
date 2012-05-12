@@ -59,7 +59,7 @@ class FacebookAuthUserSessionResource(UserSessionResource):
         user.first_name = me["first_name"]
         user.last_name = me["last_name"]
         user.email = me["email"]
-        user.username = me["username"]
+        user.username = "facebook_user_%s" % me["id"]
         user.set_unusable_password()
         user.save()
 
