@@ -29,7 +29,8 @@ AUTHENTICATION_BACKENDS += ("tastypie_user_session.auth.FacebookAuthBackend", )
 
 TASTYPIE_USER_RESOURCE_SETTINGS = {
     "facebook_app_id": "<your_app_id>",
-    "facebook_app_secret": "<your_app_secret>"
+    "facebook_app_secret": "<your_app_secret>",
+    "user_resource_path": "<your_user_resource_module>",
 }
 ```
 

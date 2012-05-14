@@ -1,4 +1,5 @@
 from django.core.urlresolvers import reverse
+from django.conf import settings
 from django.contrib.auth import login
 from django.contrib.auth import logout
 from django.contrib.auth import authenticate
@@ -8,8 +9,8 @@ from tastypie.exceptions import BadRequest
 from tastypie.resources import Resource
 from tastypie.bundle import Bundle
 from tastypie.authorization import Authorization
-from tw.resources.user import UserResource
 
+tur_settings = settings.TASTYPIE_USER_RESOURCE_SETTINGS
 
 class UserSession(object):
 
@@ -35,7 +36,7 @@ class UserSession(object):
 class UserSessionResource(Resource):
     id = fields.CharField(attribute="id", readonly=True)
     expire_date = fields.DateTimeField(attribute="expire_date", readonly=True)
-    user = fields.ForeignKey(UserResource, attribute="user", readonly=True, null=True)
+    user = fields.ForeignKey(tur_settings["user_resource_path"], attribute="user", readonly=True, null=True)
 
     class Meta:
         resource_name = "user_session"
