@@ -30,7 +30,6 @@ AUTHENTICATION_BACKENDS += ("tastypie_user_session.auth.FacebookAuthBackend", )
 TASTYPIE_USER_RESOURCE_SETTINGS = {
     "facebook_app_id": "<your_app_id>",
     "facebook_app_secret": "<your_app_secret>",
-    "user_resource_path": "<your_user_resource_module>",
 }
 ```
 
@@ -86,6 +85,15 @@ TASTYPIE_USER_RESOURCE_SETTINGS["user_profile_facebook_id_field"] = "fb_id"
 
 Now, instead of using it's own `FacebookAuthUser` model, it will use `UserProfile.fb_id` to store and look up user's Facebook ID.
 
+
+### Using your own UserResource
+
+By default, we use `tastypie_user_session.resources.UserResource`, but you can use your own if you want something custom.  
+Just add the user resource path to `TASTYPIE_USER_RESOURCE_SETTINGS`.
+
+```python
+TASTYPIE_USER_RESOURCE_SETTINGS["user_resource_path"] = "yourapp.resources.user.UserResource"
+```
 
 ### Using Facebook's Oauth dialog
 
