@@ -25,6 +25,8 @@ v1_api.register(FacebookAuthUserSessionResource())
 ```python
 INSTALLED_APPS += ("tastypie_user_session", )
 
+AUTHENTICATION_BACKENDS += ("tastypie_user_session.auth.FacebookAuthBackend", )
+
 TASTYPIE_USER_RESOURCE_SETTINGS = {
     "facebook_app_id": "<your_app_id>",
     "facebook_app_secret": "<your_app_secret>"
