@@ -3,7 +3,7 @@ from setuptools import find_packages
 
 setup(
     name="tastypie-user-session",
-    version="0.2",
+    version="0.3",
     packages=find_packages(),
     author="Tudor Prodan",
     author_email="tudor.prodan@gmail.com",
