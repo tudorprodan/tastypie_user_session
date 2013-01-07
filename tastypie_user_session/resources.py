@@ -59,7 +59,10 @@ class UserSessionResource(Resource):
         object_class = UserSession
         authorization = Authorization()
 
-    def get_resource_uri(self, bundle_or_obj):
+    def get_resource_uri(self, bundle_or_obj=None, url_name='api_dispatch_list'):
+        if not bundle_or_obj:
+            return super(UserSessionResource,
+            self).get_resource_uri(bundle_or_obj, url_name)
         obj = bundle_or_obj
 
         if isinstance(obj, Bundle):
