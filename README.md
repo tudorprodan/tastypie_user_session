@@ -2,7 +2,7 @@ This package lets you authenticate via `tastypie` using cookies.
 
 This is the ideal way to authenticate for example in a `Backbone.js` client application.
 
-`__version__ = "0.3"`
+`__version__ = "0.4"`
 
 ## Installation
 
