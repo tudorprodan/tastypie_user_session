@@ -12,7 +12,7 @@ from tastypie.resources import ModelResource
 from tastypie.bundle import Bundle
 from tastypie.authorization import Authorization
 
-tur_settings = settings.TASTYPIE_USER_RESOURCE_SETTINGS
+tur_settings = getattr(settings, "TASTYPIE_USER_RESOURCE_SETTINGS", {})
 
 class UserSession(object):
 

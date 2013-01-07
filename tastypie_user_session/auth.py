@@ -6,7 +6,7 @@ from django.conf import settings
 from tastypie.exceptions import BadRequest
 from models import UserFacebookAccount
 
-tur_settings = settings.TASTYPIE_USER_RESOURCE_SETTINGS
+tur_settings = getattr(settings, "TASTYPIE_USER_RESOURCE_SETTINGS", {})
 
 def wrap_graph_api_errors(fn):
     def wrapped(*args, **kwargs):
